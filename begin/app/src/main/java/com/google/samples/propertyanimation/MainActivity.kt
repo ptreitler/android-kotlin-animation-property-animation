@@ -76,21 +76,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun rotater() {
         ObjectAnimator.ofFloat(star, View.ROTATION, -360f, 0f).run {
-            addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    rotateButton.isEnabled = true
-                }
-
-                override fun onAnimationStart(animation: Animator?) {
-                    rotateButton.isEnabled = false
-                }
-            })
+            disableViewDuringAnimation(rotateButton)
             duration = 1000
             start()
         }
     }
 
     private fun translater() {
+        ObjectAnimator.ofFloat(star, View.TRANSLATION_X, 200f).run {
+            disableViewDuringAnimation(translateButton)
+            repeatCount = 1
+            repeatMode = ObjectAnimator.REVERSE
+            duration = 500
+            start()
+        }
     }
 
     private fun scaler() {
@@ -105,4 +104,15 @@ class MainActivity : AppCompatActivity() {
     private fun shower() {
     }
 
+    private fun ObjectAnimator.disableViewDuringAnimation(view: View) {
+        addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                view.isEnabled = true
+            }
+
+            override fun onAnimationStart(animation: Animator?) {
+                view.isEnabled = false
+            }
+        })
+    }
 }
